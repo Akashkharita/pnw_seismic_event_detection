@@ -12,7 +12,7 @@ import pandas as pd
 import argparse
 from obspy import UTCDateTime
 
-from utils.detect import smooth_moving_avg, detect_event_windows
+from detect import smooth_moving_avg, detect_event_windows
 
 
 import sys
