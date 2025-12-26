@@ -94,8 +94,8 @@ with open("stations.json", "r") as f:
     stations = json.load(f)
 
 # Create output folders
-os.makedirs("plots", exist_ok=True)
-os.makedirs("logs", exist_ok=True)
+os.makedirs("../plots", exist_ok=True)
+os.makedirs("../logs", exist_ok=True)
 log_file = "../logs/detections.csv"
 
 # Write header to CSV if not exists
