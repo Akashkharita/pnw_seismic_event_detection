@@ -1,4 +1,4 @@
-````markdown
+
 ## Using the trained **QuakeXNet** model with **SeisBench**
 
 This section explains how to (1) install SeisBench, (2) register the custom `QuakeXNet` model class, and (3) place the trained weights where SeisBench expects them.
@@ -216,4 +216,4 @@ This directory contains code to run a trained **QuakeXNet** model on continuous 
 3. Outputs include per-station CSVs and daily network-level CSVs with both timing and confidence statistics.
 
 ```
-```
+
