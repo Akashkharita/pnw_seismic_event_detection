@@ -1,0 +1,31 @@
+name: seismic-detection
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  # Python
+  - python>=3.9
+
+  # Core scientific stack
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+
+  # Seismology
+  - obspy
+
+  # Machine learning
+  - pytorch
+  - torchvision
+  - torchaudio
+
+  # SeisBench (available via pip)
+  - pip
+
+  # Utilities
+  - argparse
+
+  # Pip-only packages
+  - pip:
+      - seisbench
