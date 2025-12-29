@@ -1,31 +1,37 @@
-name: seismic-detection
+name: surface
 channels:
   - conda-forge
   - pytorch
 dependencies:
   # Python
-  - python>=3.9
+  - python=3.9.5
 
   # Core scientific stack
-  - numpy
-  - scipy
-  - pandas
-  - matplotlib
+  - numpy=1.23.5
+  - scipy=1.13.1
+  - pandas=2.3.2
+  - matplotlib=3.9.4
 
   # Seismology
-  - obspy
+  - obspy=1.4.1
 
-  # Machine learning
-  - pytorch
-  - torchvision
-  - torchaudio
+  # Machine learning (GPU, CUDA 12)
+  - pip=23.3.1
 
-  # SeisBench (available via pip)
-  - pip
-
-  # Utilities
-  - argparse
-
-  # Pip-only packages
+  # Pip-installed packages
   - pip:
-      - seisbench
+      # PyTorch stack (CUDA 12 wheels)
+      - torch==2.7.1
+      - torchvision==0.19.0
+      - torchaudio==2.7.1
+
+      # SeisBench + seismic ML
+      - seisbench==0.9.1.dev19+gd07b100
+      - tsfel==0.1.4
+      - scatseisnet==0.2.1
+      - captum==0.7.0
+      - zennit==0.5.1
+
+      # Utilities actually used
+      - tqdm==4.61.1
+      - pyyaml==6.0.1
