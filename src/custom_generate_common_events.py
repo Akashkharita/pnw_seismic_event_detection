@@ -62,23 +62,35 @@ df_all["start_time"] = pd.to_datetime(df_all["start_time"])
 
 
 
-# Round to nearest 10s window (you can try 5s or 15s too)
-df_all["rounded_start"] = df_all["start_time"].dt.round("10s")
+# --- Time-tolerance association (cluster by gaps) ---
+GAP_SECONDS = 20  # try 15–30s depending on detector timing jitter
 
+# Ensure sorted by time
+df_all = df_all.sort_values("start_time").reset_index(drop=True)
 
+# Compute time gaps between consecutive detections
+dt = df_all["start_time"].diff().dt.total_seconds().fillna(1e9)
 
+# New cluster whenever the gap is larger than tolerance
+df_all["cluster_id"] = (dt > GAP_SECONDS).cumsum()
 
+# (Optional but recommended) If a station has multiple detections in the same cluster,
+# keep the strongest one so it doesn't pollute station lists / stats.
+df_all = (df_all.sort_values("max_prob", ascending=False)
+                .drop_duplicates(subset=["cluster_id", "station"], keep="first"))
 
-# Group by the rounded start time
-grouped = df_all.groupby("rounded_start").agg(
+# Group by cluster_id instead of rounded_start
+grouped = df_all.groupby("cluster_id").agg(
+    rounded_start=("start_time", "min"),  # keep a representative event time (earliest)
     num_stations=("station", "nunique"),
-    stations=("station", lambda x: list(x)),
-    all_classes = ("class", lambda x:list(x)),
+    stations=("station", lambda x: sorted(set(x))),
+    all_classes=("class", lambda x: list(x)),
     most_common_class=("class", lambda x: x.mode()[0] if not x.mode().empty else "unknown"),
     mean_auc=("auc", "mean"),
     mean_max=("max_prob", "mean"),
-    mean_prob=("mean_prob", "mean")
+    mean_prob=("mean_prob", "mean"),
 ).reset_index()
+
 
 
 
