@@ -10,6 +10,7 @@ from obspy.clients.fdsn import Client
 import matplotlib.pyplot as plt
 import pandas as pd
 import argparse
+import os
 from obspy import UTCDateTime
 
 from detect import smooth_moving_avg, detect_event_windows
@@ -75,10 +76,20 @@ parser.add_argument("--start", type=str, required=True,
                     help="Start time in UTC (e.g., '2025-12-10T00:00:00')")
 parser.add_argument("--end", type=str, required=True,
                     help="End time in UTC (e.g., '2025-12-10T23:59:59')")
+parser.add_argument(
+    "--stations_json",
+    type=str,
+    required=True,
+    help="Path to stations JSON file (e.g., 'stations.json')"
+)
+
+
+
 args = parser.parse_args()
 
 st_time = UTCDateTime(args.start)
 et_time = UTCDateTime(args.end)
+stations_json = args.stations_json
 
 print(f"Running detection from {st_time} to {et_time} ({et_time-st_time} seconds)")
 
@@ -90,7 +101,7 @@ model = sbm.QuakeXNet.from_pretrained("base", version_str = '3')
 
 
 # Load station list
-with open("stations.json", "r") as f:
+with open(stations_json, "r") as f:
     stations = json.load(f)
 
 # Create output folders
@@ -189,11 +200,17 @@ for entry in stations:
             start_str = st_time.strftime("%Y%m%d_%H%M")
             end_str   = et_time.strftime("%Y%m%d_%H%M")
 
-            # Save CSV with start and end times in filename
-            df_events.to_csv(f"../logs/{sta}_{start_str}_to_{end_str}_events.csv", index=False)
+         
+            
+            
 
-       
+            out_dir = f"../logs/mt_rainier_detections/{start_str}_{end_str}"
+            os.makedirs(out_dir, exist_ok=True)
 
+            df_events.to_csv(
+    f"{out_dir}/{sta}_{start_str}_to_{end_str}_events.csv",
+    index=False
+)
 
 
     except Exception as e:
