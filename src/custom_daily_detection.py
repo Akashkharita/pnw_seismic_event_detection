@@ -12,7 +12,7 @@ import pandas as pd
 import argparse
 import os
 from obspy import UTCDateTime
-
+import obspy
 from detect import smooth_moving_avg, detect_event_windows
 
 
@@ -142,9 +142,39 @@ for entry in stations:
             starttime=st_time,
             endtime=et_time,
         )
+        
+        print(f"  Raw stream: {st}")  # ← add this so you can see what you got
+        
+        
+        # ── NEW: deduplicate location codes, keep one loc per channel ────────
+        # If multiple locs exist, prefer "" then "00" then whatever's first
+        seen_channels = {}
+        for tr in sorted(st, key=lambda t: t.stats.location):
+            key = tr.stats.channel
+            if key not in seen_channels:
+                seen_channels[key] = tr
+        st_clean = obspy.Stream(list(seen_channels.values()))
+        
+        
+        # ── NEW: resample to 100 sps once, before annotation ─────────────────
+        target_fs = 100.0
+        for tr in st_clean:
+            if tr.stats.sampling_rate != target_fs:
+                print(f"  Resampling {tr.id}: {tr.stats.sampling_rate} → {target_fs} sps")
+                tr.resample(target_fs)
+                
+                
+                
+                
+        # ── NEW: merge to fill any intra-day gaps (avoids annotate choking) ──
+        st_clean.merge(method=1, fill_value=0)
+
+        print(f"  Clean stream ({target_fs} sps): {st_clean}")
+        
+        
 
         # Run inference
-        probs_st = model.annotate(st, stride=500)
+        probs_st = model.annotate(st_clean, stride=500)
 
         total_auc = {}
         mean_probs = {}
