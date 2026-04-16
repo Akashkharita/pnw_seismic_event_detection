@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_212c8c03af66ae693b86f2d3c750194b {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+    <div style="position:fixed;bottom:40px;left:20px;z-index:1000;
+                background:rgba(255,255,255,0.93);border-radius:8px;
+                padding:12px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.25);
+                font-family:'Helvetica Neue',sans-serif;min-width:145px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;
+                  border-bottom:1px solid #ddd;padding-bottom:4px">
+        Years in Catalog
+      </div>
+      
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#cce5ff;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">0 yrs</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#60b5b4;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">2 yrs</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#57a686;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">5 yrs</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#b2b874;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">8 yrs</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#e2a65d;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">10 yrs</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#d15c3e;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">12 yrs</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin:3px 0">
+          <div style="width:16px;height:16px;border-radius:50%;
+                      background:#c1121f;border:1px solid #555;
+                      flex-shrink:0"></div>
+          <span style="font-size:12px">15 yrs</span>
+        </div>
+      <div style="margin-top:10px;border-top:1px solid #ddd;padding-top:6px;
+                  font-size:11px;color:#666">
+        Circle size ∝ total detections
+      </div>
+    </div>
+    
+    <div style="position:fixed;top:15px;left:50%;transform:translateX(-50%);
+                z-index:1000;background:rgba(255,255,255,0.93);
+                border-radius:8px;padding:10px 22px;
+                box-shadow:0 2px 8px rgba(0,0,0,0.2);
+                font-family:'Helvetica Neue',sans-serif;text-align:center">
+      <div style="font-size:16px;font-weight:700;color:#1a1a2e">
+        Mt Rainier Seismic Network — 2010 to 2026
+      </div>
+      <div style="font-size:12px;color:#555;margin-top:3px">
+        35 stations · CC &amp; UW networks ·
+        QuakeXNet catalog · 293,457 events
+      </div>
+    </div>
+    
+            <div class="folium-map" id="map_212c8c03af66ae693b86f2d3c750194b" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_212c8c03af66ae693b86f2d3c750194b = L.map(
+                "map_212c8c03af66ae693b86f2d3c750194b",
+                {
+                    center: [46.8523, -121.7603],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 9,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_212c8c03af66ae693b86f2d3c750194b);
+
+            
+
+        
+    
+            var tile_layer_26cdfb70d24bc047a6427ae681ac3960 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_26cdfb70d24bc047a6427ae681ac3960.addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+            var tile_layer_6a89f5916b3132c71e2dea64c4ebac75 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {"attribution": "Esri", "detectRetina": false, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_6a89f5916b3132c71e2dea64c4ebac75.addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+            var tile_layer_4b097a03df707b071dd526d58551afa3 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_4b097a03df707b071dd526d58551afa3.addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+            var polygon_920c0b4295c8f0e6656cf7c587f3d3a7 = L.polygon(
+                [[46.98, -121.76], [46.975, -121.72], [46.965, -121.685], [46.95, -121.66], [46.93, -121.645], [46.91, -121.64], [46.89, -121.648], [46.87, -121.66], [46.853, -121.678], [46.84, -121.7], [46.83, -121.725], [46.825, -121.755], [46.827, -121.785], [46.835, -121.812], [46.848, -121.833], [46.865, -121.848], [46.885, -121.855], [46.905, -121.852], [46.925, -121.842], [46.942, -121.825], [46.955, -121.803], [46.963, -121.778], [46.968, -121.752], [46.972, -121.728], [46.978, -121.748], [46.98, -121.76]],
+                {"bubblingMouseEvents": true, "color": "#8B4513", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cd853f", "fillOpacity": 0.15, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_f8f2170ca6cdbf6406f09ecdff2409d8 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_0067bcc85e4b7bb317a85116f907dffe = $(`<div id="html_0067bcc85e4b7bb317a85116f907dffe" style="width: 100.0%; height: 100.0%;">Mt Rainier (4,392 m)</div>`)[0];
+                popup_f8f2170ca6cdbf6406f09ecdff2409d8.setContent(html_0067bcc85e4b7bb317a85116f907dffe);
+            
+        
+
+        polygon_920c0b4295c8f0e6656cf7c587f3d3a7.bindPopup(popup_f8f2170ca6cdbf6406f09ecdff2409d8)
+        ;
+
+        
+    
+    
+            polygon_920c0b4295c8f0e6656cf7c587f3d3a7.bindTooltip(
+                `<div>
+                     Mt Rainier volcanic edifice (~3000 m contour)
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_dc21d309fd1031fecf7ab67c7e2f4059 = L.marker(
+                [46.8523, -121.7603],
+                {}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+            var icon_9b17b998593308628f9d05478ebe0ccf = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "fire", "iconColor": "white", "markerColor": "red", "prefix": "fa"}
+            );
+            marker_dc21d309fd1031fecf7ab67c7e2f4059.setIcon(icon_9b17b998593308628f9d05478ebe0ccf);
+        
+    
+            marker_dc21d309fd1031fecf7ab67c7e2f4059.bindTooltip(
+                `<div>
+                     Mt Rainier Summit (4,392 m)
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_97e1628be8771eb1a8c98ad1ede960db = L.circleMarker(
+                [46.789, -121.853],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#34a196", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.906177631284926, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_a58bbde6ed11a4aeb422d2d7c82c1c45 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_6d2cef9c765d4833bb09022dfde4b14c = $(`<div id="html_6d2cef9c765d4833bb09022dfde4b14c" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.ARAT             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1822 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.789, -121.853</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-24</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>39,660</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>8,836 (22%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>28,701 (72%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>2,123 (5%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_a58bbde6ed11a4aeb422d2d7c82c1c45.setContent(html_6d2cef9c765d4833bb09022dfde4b14c);
+            
+        
+
+        circle_marker_97e1628be8771eb1a8c98ad1ede960db.bindPopup(popup_a58bbde6ed11a4aeb422d2d7c82c1c45)
+        ;
+
+        
+    
+    
+            circle_marker_97e1628be8771eb1a8c98ad1ede960db.bindTooltip(
+                `<div>
+                     CC.ARAT (BH) — 3.5 yrs — 39,660 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_f2afd51335c19b637f236ad78923f1f0 = L.circleMarker(
+                [46.98832, -122.00541],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#91b27a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.542943722446827, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_cb4e05c160b1becb2fee30f365ecc9f0 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_848b564bcbaa6bae8005c913c4283afc = $(`<div id="html_848b564bcbaa6bae8005c913c4283afc" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.CARB             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>872 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.988, -122.005</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>6.6</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2019-07-31</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>28,448</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>11,542 (41%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>13,634 (48%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>3,272 (12%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_cb4e05c160b1becb2fee30f365ecc9f0.setContent(html_848b564bcbaa6bae8005c913c4283afc);
+            
+        
+
+        circle_marker_f2afd51335c19b637f236ad78923f1f0.bindPopup(popup_cb4e05c160b1becb2fee30f365ecc9f0)
+        ;
+
+        
+    
+    
+            circle_marker_f2afd51335c19b637f236ad78923f1f0.bindTooltip(
+                `<div>
+                     CC.CARB (BH) — 6.6 yrs — 28,448 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_1c731cf4663a0323ae51d128cbf1f75d = L.circleMarker(
+                [46.79798, -121.82875],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#34a196", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.952142679881195, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_98cb0cfa9e938add35050545286a0eb2 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_555df0f0ed377bb12dd5f8c00c50e1c9 = $(`<div id="html_555df0f0ed377bb12dd5f8c00c50e1c9" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.COPP             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1895 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.798, -121.829</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-21</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>83,879</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>15,585 (19%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>63,766 (76%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>4,528 (5%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_98cb0cfa9e938add35050545286a0eb2.setContent(html_555df0f0ed377bb12dd5f8c00c50e1c9);
+            
+        
+
+        circle_marker_1c731cf4663a0323ae51d128cbf1f75d.bindPopup(popup_98cb0cfa9e938add35050545286a0eb2)
+        ;
+
+        
+    
+    
+            circle_marker_1c731cf4663a0323ae51d128cbf1f75d.bindTooltip(
+                `<div>
+                     CC.COPP (BH) — 3.5 yrs — 83,879 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_108f868ad15b619f77921a574419ee7d = L.circleMarker(
+                [46.988155, -121.961026],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#66a983", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.530869803681378, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_0983650a0a5aeec97b27bd92979d4e9d = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_f7456eef1d59d5cda86e3714db240816 = $(`<div id="html_f7456eef1d59d5cda86e3714db240816" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.CRBN             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>500 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.988, -121.961</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>5.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2020-10-22</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-05</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>28,357</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>12,742 (45%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>12,783 (45%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>2,832 (10%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_0983650a0a5aeec97b27bd92979d4e9d.setContent(html_f7456eef1d59d5cda86e3714db240816);
+            
+        
+
+        circle_marker_108f868ad15b619f77921a574419ee7d.bindPopup(popup_0983650a0a5aeec97b27bd92979d4e9d)
+        ;
+
+        
+    
+    
+            circle_marker_108f868ad15b619f77921a574419ee7d.bindTooltip(
+                `<div>
+                     CC.CRBN (BH) — 5.4 yrs — 28,357 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_f62b1c34591e9f0763792eddd3e7230b = L.circleMarker(
+                [46.93441, -121.50026],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b6dbf0", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.571769818626853, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_2afe8290810c0e2793a15606968c0614 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_2498f648e8528136444e54af07faf8f5 = $(`<div id="html_2498f648e8528136444e54af07faf8f5" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.CRYS             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">HH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>2027 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.934, -121.500</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>0.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2025-09-12</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>3,307</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>1,048 (32%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>1,790 (54%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>469 (14%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_2afe8290810c0e2793a15606968c0614.setContent(html_2498f648e8528136444e54af07faf8f5);
+            
+        
+
+        circle_marker_f62b1c34591e9f0763792eddd3e7230b.bindPopup(popup_2afe8290810c0e2793a15606968c0614)
+        ;
+
+        
+    
+    
+            circle_marker_f62b1c34591e9f0763792eddd3e7230b.bindTooltip(
+                `<div>
+                     CC.CRYS (HH) — 0.5 yrs — 3,307 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_18835f1d78709d4c6d684b35136b86e0 = L.circleMarker(
+                [46.79414, -121.91438],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#39a399", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 16.253888216967503, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_014cdaf406fc0f7b4a43e0c43a1496a2 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_24aa64a7d366d58d70cb16dfe33caaf4 = $(`<div id="html_24aa64a7d366d58d70cb16dfe33caaf4" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.GNOB             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1659 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.794, -121.914</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-10-19</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>63,325</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>18,546 (29%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>39,393 (62%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>5,386 (9%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_014cdaf406fc0f7b4a43e0c43a1496a2.setContent(html_24aa64a7d366d58d70cb16dfe33caaf4);
+            
+        
+
+        circle_marker_18835f1d78709d4c6d684b35136b86e0.bindPopup(popup_014cdaf406fc0f7b4a43e0c43a1496a2)
+        ;
+
+        
+    
+    
+            circle_marker_18835f1d78709d4c6d684b35136b86e0.bindTooltip(
+                `<div>
+                     CC.GNOB (BH) — 3.4 yrs — 63,325 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_7ba8ffc9a9d61f6647863d69d21d6f8b = L.circleMarker(
+                [46.79414, -121.91438],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c7e3fc", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.814938015470501, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_da220b97f0b8bb35d851893440286558 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_dd62b08c67ba49e61f19396bf919b9c2 = $(`<div id="html_dd62b08c67ba49e61f19396bf919b9c2" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.GOBB             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1659 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.794, -121.914</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>0.1</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-09</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2022-10-18</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>1,647</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>282 (17%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>1,275 (77%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>90 (5%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_da220b97f0b8bb35d851893440286558.setContent(html_dd62b08c67ba49e61f19396bf919b9c2);
+            
+        
+
+        circle_marker_7ba8ffc9a9d61f6647863d69d21d6f8b.bindPopup(popup_da220b97f0b8bb35d851893440286558)
+        ;
+
+        
+    
+    
+            circle_marker_7ba8ffc9a9d61f6647863d69d21d6f8b.bindTooltip(
+                `<div>
+                     CC.GOBB (BH) — 0.1 yrs — 1,647 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_724d98f5c93d04b0cd968b42262618dc = L.circleMarker(
+                [46.740208, -121.916966],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#66a983", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.39892850308895, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_3420c093b529c4f2d49b02dc6c5986e6 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_9b8be7c9e035fc6520752c47e3c6e3e2 = $(`<div id="html_9b8be7c9e035fc6520752c47e3c6e3e2" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.GTWY             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>617 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.740, -121.917</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>5.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2020-10-28</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>35,271</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>13,585 (39%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>18,588 (53%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>3,098 (9%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_3420c093b529c4f2d49b02dc6c5986e6.setContent(html_9b8be7c9e035fc6520752c47e3c6e3e2);
+            
+        
+
+        circle_marker_724d98f5c93d04b0cd968b42262618dc.bindPopup(popup_3420c093b529c4f2d49b02dc6c5986e6)
+        ;
+
+        
+    
+    
+            circle_marker_724d98f5c93d04b0cd968b42262618dc.bindTooltip(
+                `<div>
+                     CC.GTWY (BH) — 5.4 yrs — 35,271 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_3347dba59f1bc8923b4add2b9f2353a0 = L.circleMarker(
+                [46.730263, -121.857381],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#69aa82", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.275604230796695, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_dca228bd94aa2a72e4fc95ed01ec10a4 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_944f4705d3a6c80ed47e7549a108fe4a = $(`<div id="html_944f4705d3a6c80ed47e7549a108fe4a" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.KAUT             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>689 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.730, -121.857</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>5.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2020-09-02</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>13,916</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>4,816 (35%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>7,626 (55%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>1,474 (11%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_dca228bd94aa2a72e4fc95ed01ec10a4.setContent(html_944f4705d3a6c80ed47e7549a108fe4a);
+            
+        
+
+        circle_marker_3347dba59f1bc8923b4add2b9f2353a0.bindPopup(popup_dca228bd94aa2a72e4fc95ed01ec10a4)
+        ;
+
+        
+    
+    
+            circle_marker_3347dba59f1bc8923b4add2b9f2353a0.bindTooltip(
+                `<div>
+                     CC.KAUT (BH) — 5.5 yrs — 13,916 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_623ce6396855dbec64c0ec903cb5bb5e = L.circleMarker(
+                [46.76041, -122.03856],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60b5b4", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.180471501850983, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_29f2cb2c5f6fb8dd5d110b9d92912716 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_ddda00d68b1f60d8cc8c9d090eec941f = $(`<div id="html_ddda00d68b1f60d8cc8c9d090eec941f" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.KAVK             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>532 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.760, -122.039</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>2.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2023-08-27</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>51,821</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>22,009 (42%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>25,482 (49%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>4,330 (8%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_29f2cb2c5f6fb8dd5d110b9d92912716.setContent(html_ddda00d68b1f60d8cc8c9d090eec941f);
+            
+        
+
+        circle_marker_623ce6396855dbec64c0ec903cb5bb5e.bindPopup(popup_29f2cb2c5f6fb8dd5d110b9d92912716)
+        ;
+
+        
+    
+    
+            circle_marker_623ce6396855dbec64c0ec903cb5bb5e.bindTooltip(
+                `<div>
+                     CC.KAVK (BH) — 2.5 yrs — 51,821 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_6abb4a6e7f9eb3872571e75bd9e1cdf6 = L.circleMarker(
+                [47.00989, -121.67369],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c7e3fc", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.382750881395488, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_d54e732d4260d67af2614e1b015847ad = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_1225bdfc875294c679285e92b3b09bc1 = $(`<div id="html_1225bdfc875294c679285e92b3b09bc1" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.LONE             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1640 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>47.010, -121.674</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>0.1</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2025-09-09</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2025-10-02</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>956</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>268 (28%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>592 (62%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>96 (10%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_d54e732d4260d67af2614e1b015847ad.setContent(html_1225bdfc875294c679285e92b3b09bc1);
+            
+        
+
+        circle_marker_6abb4a6e7f9eb3872571e75bd9e1cdf6.bindPopup(popup_d54e732d4260d67af2614e1b015847ad)
+        ;
+
+        
+    
+    
+            circle_marker_6abb4a6e7f9eb3872571e75bd9e1cdf6.bindTooltip(
+                `<div>
+                     CC.LONE (BH) — 0.1 yrs — 956 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_3d084e82927c696be904fac409f11bf6 = L.circleMarker(
+                [47.00989, -121.67369],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#baddf3", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.03051150798013, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_b6b5e9243e3b3627c736d1499b577127 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_28c9aeff34e4fffc64091f2592f19154 = $(`<div id="html_28c9aeff34e4fffc64091f2592f19154" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.LONR             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1640 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>47.010, -121.674</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>0.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2025-10-02</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>4,592</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>1,363 (30%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>2,477 (54%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>752 (16%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_b6b5e9243e3b3627c736d1499b577127.setContent(html_28c9aeff34e4fffc64091f2592f19154);
+            
+        
+
+        circle_marker_3d084e82927c696be904fac409f11bf6.bindPopup(popup_b6b5e9243e3b3627c736d1499b577127)
+        ;
+
+        
+    
+    
+            circle_marker_3d084e82927c696be904fac409f11bf6.bindTooltip(
+                `<div>
+                     CC.LONR (BH) — 0.4 yrs — 4,592 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_e88cdf931297487927f16669e7491594 = L.circleMarker(
+                [46.8081, -121.77568],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#34a196", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_aab9ae74d726003e163c27eb2f2deb12 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_29b09dc94af0aeff66b5778993328c97 = $(`<div id="html_29b09dc94af0aeff66b5778993328c97" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.MILD             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>2016 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.808, -121.776</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-24</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>100,822</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>22,416 (22%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>69,943 (69%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>8,463 (8%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_aab9ae74d726003e163c27eb2f2deb12.setContent(html_29b09dc94af0aeff66b5778993328c97);
+            
+        
+
+        circle_marker_e88cdf931297487927f16669e7491594.bindPopup(popup_aab9ae74d726003e163c27eb2f2deb12)
+        ;
+
+        
+    
+    
+            circle_marker_e88cdf931297487927f16669e7491594.bindTooltip(
+                `<div>
+                     CC.MILD (BH) — 3.5 yrs — 100,822 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_0f97f3b10ad6ad1b0190ff7990e96dff = L.circleMarker(
+                [46.899719, -121.815331],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c1121f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_5fd68c16417f7adc884d9c95d639d18c = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_c09eb720c62224c2540be7195bd53941 = $(`<div id="html_c09eb720c62224c2540be7195bd53941" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.OBSR             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>2382 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.900, -121.815</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>15.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2010-09-15</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>162,969</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>35,135 (22%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>112,065 (69%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>15,769 (10%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_5fd68c16417f7adc884d9c95d639d18c.setContent(html_c09eb720c62224c2540be7195bd53941);
+            
+        
+
+        circle_marker_0f97f3b10ad6ad1b0190ff7990e96dff.bindPopup(popup_5fd68c16417f7adc884d9c95d639d18c)
+        ;
+
+        
+    
+    
+            circle_marker_0f97f3b10ad6ad1b0190ff7990e96dff.bindTooltip(
+                `<div>
+                     CC.OBSR (BH) — 15.5 yrs — 162,969 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_0beb9f7eea46d7e80bca8fdf322de6ab = L.circleMarker(
+                [46.731288, -121.5713],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#62a884", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.324902401830306, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_5e996230a99c78f3bfb46000521d8507 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_71eb1b973aeff078bdecb210a2eafab5 = $(`<div id="html_71eb1b973aeff078bdecb210a2eafab5" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.OPCH             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>593 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.731, -121.571</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>5.3</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2020-11-20</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-04</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>34,652</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>9,907 (29%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>19,326 (56%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>5,419 (16%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_5e996230a99c78f3bfb46000521d8507.setContent(html_71eb1b973aeff078bdecb210a2eafab5);
+            
+        
+
+        circle_marker_0beb9f7eea46d7e80bca8fdf322de6ab.bindPopup(popup_5e996230a99c78f3bfb46000521d8507)
+        ;
+
+        
+    
+    
+            circle_marker_0beb9f7eea46d7e80bca8fdf322de6ab.bindTooltip(
+                `<div>
+                     CC.OPCH (BH) — 5.3 yrs — 34,652 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_74299af1e3493126f4f38d7f13145b4f = L.circleMarker(
+                [46.859032, -121.642592],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c1121f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_470ab53d198397bc41381dd1bfc4c9a2 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_9118f1cd7b041150d20be6749bacb2f5 = $(`<div id="html_9118f1cd7b041150d20be6749bacb2f5" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PANH             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>2086 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.859, -121.643</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>15.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2010-09-30</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>126,365</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>22,216 (18%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>87,426 (69%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>16,723 (13%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_470ab53d198397bc41381dd1bfc4c9a2.setContent(html_9118f1cd7b041150d20be6749bacb2f5);
+            
+        
+
+        circle_marker_74299af1e3493126f4f38d7f13145b4f.bindPopup(popup_470ab53d198397bc41381dd1bfc4c9a2)
+        ;
+
+        
+    
+    
+            circle_marker_74299af1e3493126f4f38d7f13145b4f.bindTooltip(
+                `<div>
+                     CC.PANH (BH) — 15.4 yrs — 126,365 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_5196c1a9c0a928e4acbdd1f74bb4205a = L.circleMarker(
+                [46.786441, -121.742195],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#66a983", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_a0cd3b551ce17ab682138e88e5e0dc2f = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_6bf76a67242947e0002a5549b14d38c6 = $(`<div id="html_6bf76a67242947e0002a5549b14d38c6" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PARA             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1651 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.786, -121.742</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>5.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2020-10-08</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>96,915</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>17,068 (18%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>67,399 (70%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>12,448 (13%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_a0cd3b551ce17ab682138e88e5e0dc2f.setContent(html_6bf76a67242947e0002a5549b14d38c6);
+            
+        
+
+        circle_marker_5196c1a9c0a928e4acbdd1f74bb4205a.bindPopup(popup_a0cd3b551ce17ab682138e88e5e0dc2f)
+        ;
+
+        
+    
+    
+            circle_marker_5196c1a9c0a928e4acbdd1f74bb4205a.bindTooltip(
+                `<div>
+                     CC.PARA (BH) — 5.4 yrs — 96,915 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_3bc392f67af059647368849a2d8541e0 = L.circleMarker(
+                [46.910103, -122.037586],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cbbe6f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.810580004669205, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_2cdd9da37a7965e63f1cf1d6b1b996c7 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_b18cb3d1cbaa26c3580ee9950a8da05d = $(`<div id="html_b18cb3d1cbaa26c3580ee9950a8da05d" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PR01             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>648 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.910, -122.038</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>8.2</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2017-12-23</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>23,192</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>9,382 (40%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>10,171 (44%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>3,639 (16%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_2cdd9da37a7965e63f1cf1d6b1b996c7.setContent(html_b18cb3d1cbaa26c3580ee9950a8da05d);
+            
+        
+
+        circle_marker_3bc392f67af059647368849a2d8541e0.bindPopup(popup_2cdd9da37a7965e63f1cf1d6b1b996c7)
+        ;
+
+        
+    
+    
+            circle_marker_3bc392f67af059647368849a2d8541e0.bindTooltip(
+                `<div>
+                     CC.PR01 (BH) — 8.2 yrs — 23,192 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_10c919ddbf7bdfd791e53fe17824e3c8 = L.circleMarker(
+                [46.918303, -122.048695],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cbbe6f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.106270654792986, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_cbb07e6e3a0edc71f07b952d2d1bac47 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_05648cfc0178017ea27bd71334750627 = $(`<div id="html_05648cfc0178017ea27bd71334750627" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PR02             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>461 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.918, -122.049</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>8.2</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2018-01-13</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>13,037</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>3,787 (29%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>6,800 (52%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>2,450 (19%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_cbb07e6e3a0edc71f07b952d2d1bac47.setContent(html_05648cfc0178017ea27bd71334750627);
+            
+        
+
+        circle_marker_10c919ddbf7bdfd791e53fe17824e3c8.bindPopup(popup_cbb07e6e3a0edc71f07b952d2d1bac47)
+        ;
+
+        
+    
+    
+            circle_marker_10c919ddbf7bdfd791e53fe17824e3c8.bindTooltip(
+                `<div>
+                     CC.PR02 (BH) — 8.2 yrs — 13,037 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_30eb73e3dc2458f53a254880a7a6ef40 = L.circleMarker(
+                [46.903433, -122.032691],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cbbe6f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.401851534427802, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_cbc304a18c5b968dd45d00ce25ae0e66 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_54b263db6c00cff5206632f49b3c2093 = $(`<div id="html_54b263db6c00cff5206632f49b3c2093" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PR03             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>523 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.903, -122.033</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>8.2</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2017-12-23</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>14,590</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>4,797 (33%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>7,203 (49%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>2,590 (18%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_cbc304a18c5b968dd45d00ce25ae0e66.setContent(html_54b263db6c00cff5206632f49b3c2093);
+            
+        
+
+        circle_marker_30eb73e3dc2458f53a254880a7a6ef40.bindPopup(popup_cbc304a18c5b968dd45d00ce25ae0e66)
+        ;
+
+        
+    
+    
+            circle_marker_30eb73e3dc2458f53a254880a7a6ef40.bindTooltip(
+                `<div>
+                     CC.PR03 (BH) — 8.2 yrs — 14,590 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_17ae15381a12a815624d566a524f7c53 = L.circleMarker(
+                [46.929773, -121.988592],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cbbe6f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.81668872082938, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_b611bd3006a568be423dacd36ac0dffd = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_70eb17eca60b0b250162a60f27e7abb4 = $(`<div id="html_70eb17eca60b0b250162a60f27e7abb4" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PR04             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>908 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.930, -121.989</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>8.2</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2017-12-23</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>38,867</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>13,144 (34%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>20,166 (52%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>5,557 (14%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_b611bd3006a568be423dacd36ac0dffd.setContent(html_70eb17eca60b0b250162a60f27e7abb4);
+            
+        
+
+        circle_marker_17ae15381a12a815624d566a524f7c53.bindPopup(popup_b611bd3006a568be423dacd36ac0dffd)
+        ;
+
+        
+    
+    
+            circle_marker_17ae15381a12a815624d566a524f7c53.bindTooltip(
+                `<div>
+                     CC.PR04 (BH) — 8.2 yrs — 38,867 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_6172e5a91b166bb14130f092aa7346c2 = L.circleMarker(
+                [46.841723, -121.948863],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#cbbe6f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.70625985113382, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_07afe596180f6dff91242bb56164ae77 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_1ff2ec172e20a9ddf501042ad8e17618 = $(`<div id="html_1ff2ec172e20a9ddf501042ad8e17618" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.PR05             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1553 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.842, -121.949</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>8.2</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2017-12-23</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>57,312</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>17,454 (30%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>32,378 (56%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>7,480 (13%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_07afe596180f6dff91242bb56164ae77.setContent(html_1ff2ec172e20a9ddf501042ad8e17618);
+            
+        
+
+        circle_marker_6172e5a91b166bb14130f092aa7346c2.bindPopup(popup_07afe596180f6dff91242bb56164ae77)
+        ;
+
+        
+    
+    
+            circle_marker_6172e5a91b166bb14130f092aa7346c2.bindTooltip(
+                `<div>
+                     CC.PR05 (BH) — 8.2 yrs — 57,312 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_0dd64c736c16cb562af3edc8b4ae5fbc = L.circleMarker(
+                [46.90305, -121.94419],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#91b27a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.925421905390218, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_de3763a4cb4f952bc059f666b0645987 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_9fa62961e74d399df61bf0d935e7aa26 = $(`<div id="html_9fa62961e74d399df61bf0d935e7aa26" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.RUSH             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1235 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.903, -121.944</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>6.6</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2019-07-31</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>49,257</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>12,625 (26%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>27,422 (56%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>9,210 (19%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_de3763a4cb4f952bc059f666b0645987.setContent(html_9fa62961e74d399df61bf0d935e7aa26);
+            
+        
+
+        circle_marker_0dd64c736c16cb562af3edc8b4ae5fbc.bindPopup(popup_de3763a4cb4f952bc059f666b0645987)
+        ;
+
+        
+    
+    
+            circle_marker_0dd64c736c16cb562af3edc8b4ae5fbc.bindTooltip(
+                `<div>
+                     CC.RUSH (BH) — 6.6 yrs — 49,257 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_c72e4f4b92473b4c0beb32e9d87e777f = L.circleMarker(
+                [46.86683, -121.95329],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#91b27a", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.41085971474018, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_6f4174a74243caf8b4676328b7faf690 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_d2c8aa37b31349fed44fbaf023e4c861 = $(`<div id="html_d2c8aa37b31349fed44fbaf023e4c861" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.SIFT             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>732 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.867, -121.953</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>6.6</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2019-07-31</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>54,193</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>15,718 (29%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>28,365 (52%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>10,110 (19%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_6f4174a74243caf8b4676328b7faf690.setContent(html_d2c8aa37b31349fed44fbaf023e4c861);
+            
+        
+
+        circle_marker_c72e4f4b92473b4c0beb32e9d87e777f.bindPopup(popup_6f4174a74243caf8b4676328b7faf690)
+        ;
+
+        
+    
+    
+            circle_marker_c72e4f4b92473b4c0beb32e9d87e777f.bindTooltip(
+                `<div>
+                     CC.SIFT (BH) — 6.6 yrs — 54,193 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_8de8300a70e6c5ffeb333ba90e645fd5 = L.circleMarker(
+                [46.80435, -121.84948],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#34a196", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.41350163941972, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_be9402936ca30f854d0c570ab3272312 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_9b4fec367b5b6ffbb6c399b41a84c162 = $(`<div id="html_9b4fec367b5b6ffbb6c399b41a84c162" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.TABR             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1278 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.804, -121.849</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-28</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>14,653</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>2,693 (18%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>9,052 (62%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>2,908 (20%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_be9402936ca30f854d0c570ab3272312.setContent(html_9b4fec367b5b6ffbb6c399b41a84c162);
+            
+        
+
+        circle_marker_8de8300a70e6c5ffeb333ba90e645fd5.bindPopup(popup_be9402936ca30f854d0c570ab3272312)
+        ;
+
+        
+    
+    
+            circle_marker_8de8300a70e6c5ffeb333ba90e645fd5.bindTooltip(
+                `<div>
+                     CC.TABR (BH) — 3.5 yrs — 14,653 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_95b4e708944cf13cb5ebc8f423f355ca = L.circleMarker(
+                [46.7957, -121.88423],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#34a196", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.113754983641396, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_a70203b6fe5213673e7a819aea2d8e64 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_e6b5a66e595084e9d1079d3c077b8bfc = $(`<div id="html_e6b5a66e595084e9d1079d3c077b8bfc" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.TAVI             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1055 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.796, -121.884</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-27</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>18,689</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>6,860 (37%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>8,305 (44%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>3,524 (19%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_a70203b6fe5213673e7a819aea2d8e64.setContent(html_e6b5a66e595084e9d1079d3c077b8bfc);
+            
+        
+
+        circle_marker_95b4e708944cf13cb5ebc8f423f355ca.bindPopup(popup_a70203b6fe5213673e7a819aea2d8e64)
+        ;
+
+        
+    
+    
+            circle_marker_95b4e708944cf13cb5ebc8f423f355ca.bindTooltip(
+                `<div>
+                     CC.TAVI (BH) — 3.5 yrs — 18,689 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_c9f74c0cdbbff6e8bc30250f29d71493 = L.circleMarker(
+                [46.96636, -121.98328],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#69aa82", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.715273948649005, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_3b14389a09999f877a6d38739f53a435 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_8fe1e352e209edd6d07ccad42a99bb65 = $(`<div id="html_8fe1e352e209edd6d07ccad42a99bb65" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.VOIT             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>977 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.966, -121.983</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>5.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2020-08-26</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>37,978</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>11,347 (30%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>17,895 (47%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>8,736 (23%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_3b14389a09999f877a6d38739f53a435.setContent(html_8fe1e352e209edd6d07ccad42a99bb65);
+            
+        
+
+        circle_marker_c9f74c0cdbbff6e8bc30250f29d71493.bindPopup(popup_3b14389a09999f877a6d38739f53a435)
+        ;
+
+        
+    
+    
+            circle_marker_c9f74c0cdbbff6e8bc30250f29d71493.bindTooltip(
+                `<div>
+                     CC.VOIT (BH) — 5.5 yrs — 37,978 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_8ff4fe1052a3c853111a3aacc7547465 = L.circleMarker(
+                [46.78003, -121.8851],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#39a399", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.456587912956937, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_995b8160d7bc330b60ea650a41079a14 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_e20640a56f646919b8d00496e8d75651 = $(`<div id="html_e20640a56f646919b8d00496e8d75651" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             CC.WOW             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>875 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.780, -121.885</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.4</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-27</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-02-10</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>5,974</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>1,895 (32%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>2,602 (44%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>1,477 (25%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_995b8160d7bc330b60ea650a41079a14.setContent(html_e20640a56f646919b8d00496e8d75651);
+            
+        
+
+        circle_marker_8ff4fe1052a3c853111a3aacc7547465.bindPopup(popup_995b8160d7bc330b60ea650a41079a14)
+        ;
+
+        
+    
+    
+            circle_marker_8ff4fe1052a3c853111a3aacc7547465.bindTooltip(
+                `<div>
+                     CC.WOW (BH) — 3.4 yrs — 5,974 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_d2f40a5ba0925d51ff61d1c4f0ae05ec = L.circleMarker(
+                [46.941914, -121.671465],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a3b577", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_1b0ab513dcdee6c62d70b63d8f701694 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_78469458841245a7269918d2c70dfd90 = $(`<div id="html_78469458841245a7269918d2c70dfd90" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.FMW             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">HH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1897 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.942, -121.671</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>7.1</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2018-10-18</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2025-12-09</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>108,639</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>24,453 (23%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>76,013 (70%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>8,173 (8%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_1b0ab513dcdee6c62d70b63d8f701694.setContent(html_78469458841245a7269918d2c70dfd90);
+            
+        
+
+        circle_marker_d2f40a5ba0925d51ff61d1c4f0ae05ec.bindPopup(popup_1b0ab513dcdee6c62d70b63d8f701694)
+        ;
+
+        
+    
+    
+            circle_marker_d2f40a5ba0925d51ff61d1c4f0ae05ec.bindTooltip(
+                `<div>
+                     UW.FMW (HH) — 7.1 yrs — 108,639 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_a3ce46daa30a57b17a09642d6c28693d = L.circleMarker(
+                [46.7506, -121.8096],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c1121f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.956706282702127, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_671eecfeff3c8b9ec444b7bf3873763c = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_91c11cf6bfdd9c870613e89d9f8dcdef = $(`<div id="html_91c11cf6bfdd9c870613e89d9f8dcdef" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.LO2             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">EH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>853 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.751, -121.810</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>16.0</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2010-03-01</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>49,568</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>8,971 (18%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>34,234 (69%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>6,363 (13%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_671eecfeff3c8b9ec444b7bf3873763c.setContent(html_91c11cf6bfdd9c870613e89d9f8dcdef);
+            
+        
+
+        circle_marker_a3ce46daa30a57b17a09642d6c28693d.bindPopup(popup_671eecfeff3c8b9ec444b7bf3873763c)
+        ;
+
+        
+    
+    
+            circle_marker_a3ce46daa30a57b17a09642d6c28693d.bindTooltip(
+                `<div>
+                     UW.LO2 (EH) — 16.0 yrs — 49,568 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_908da2a18cf4a9ff87e094a0e0a4b6ae = L.circleMarker(
+                [46.750599, -121.809601],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e7bb66", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.773772951612713, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_8d6afffa80bccaa35d2b823f6c8a4a10 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_a5be53a7508d518f842d6124aec5cb3d = $(`<div id="html_a5be53a7508d518f842d6124aec5cb3d" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.LON             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">BH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>853 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.751, -121.810</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>9.3</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2010-03-01</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2019-06-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>22,942</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>3,684 (16%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>15,654 (68%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>3,604 (16%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_8d6afffa80bccaa35d2b823f6c8a4a10.setContent(html_a5be53a7508d518f842d6124aec5cb3d);
+            
+        
+
+        circle_marker_908da2a18cf4a9ff87e094a0e0a4b6ae.bindPopup(popup_8d6afffa80bccaa35d2b823f6c8a4a10)
+        ;
+
+        
+    
+    
+            circle_marker_908da2a18cf4a9ff87e094a0e0a4b6ae.bindTooltip(
+                `<div>
+                     UW.LON (BH) — 9.3 yrs — 22,942 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_21be55a4e8039a7aa5c28462d9ec54de = L.circleMarker(
+                [46.83557, -121.73318],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b2b874", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_f1c24d14f5ffdfeca38df7dcf99a1a69 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_7c047e01ab15371754306472b0e848dc = $(`<div id="html_7c047e01ab15371754306472b0e848dc" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.RCM             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">HH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>3077 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.836, -121.733</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>7.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2018-09-20</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>146,626</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>37,301 (25%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>86,261 (59%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>23,064 (16%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_f1c24d14f5ffdfeca38df7dcf99a1a69.setContent(html_7c047e01ab15371754306472b0e848dc);
+            
+        
+
+        circle_marker_21be55a4e8039a7aa5c28462d9ec54de.bindPopup(popup_f1c24d14f5ffdfeca38df7dcf99a1a69)
+        ;
+
+        
+    
+    
+            circle_marker_21be55a4e8039a7aa5c28462d9ec54de.bindTooltip(
+                `<div>
+                     UW.RCM (HH) — 7.5 yrs — 146,626 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_323112a9a7dcccb8f9e3e09df649422e = L.circleMarker(
+                [46.87083, -121.73231],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c1121f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_4950e9b930a997175bd3c60ce5741b5d = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_4243c7785b383a5647ebc86fda94264a = $(`<div id="html_4243c7785b383a5647ebc86fda94264a" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.RCS             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">EH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>2877 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.871, -121.732</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>16.0</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2010-03-01</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>132,234</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>32,341 (24%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>72,538 (55%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>27,355 (21%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_4950e9b930a997175bd3c60ce5741b5d.setContent(html_4243c7785b383a5647ebc86fda94264a);
+            
+        
+
+        circle_marker_323112a9a7dcccb8f9e3e09df649422e.bindPopup(popup_4950e9b930a997175bd3c60ce5741b5d)
+        ;
+
+        
+    
+    
+            circle_marker_323112a9a7dcccb8f9e3e09df649422e.bindTooltip(
+                `<div>
+                     UW.RCS (EH) — 16.0 yrs — 132,234 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_f5e36a6fc0bf33e58c8810faeadd5676 = L.circleMarker(
+                [46.81858, -121.8425],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#34a196", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_ff14570aaf3e5585f3a4e2a745e99b36 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_00958b7b9630b314ddc4c20c8e1feef2 = $(`<div id="html_00958b7b9630b314ddc4c20c8e1feef2" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.RER             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">HH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>1751 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.819, -121.843</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>3.5</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2022-09-20</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>90,729</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>20,798 (23%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>53,927 (59%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>16,004 (18%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_ff14570aaf3e5585f3a4e2a745e99b36.setContent(html_00958b7b9630b314ddc4c20c8e1feef2);
+            
+        
+
+        circle_marker_f5e36a6fc0bf33e58c8810faeadd5676.bindPopup(popup_ff14570aaf3e5585f3a4e2a745e99b36)
+        ;
+
+        
+    
+    
+            circle_marker_f5e36a6fc0bf33e58c8810faeadd5676.bindTooltip(
+                `<div>
+                     UW.RER (HH) — 3.5 yrs — 90,729 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_45c3a5e141bead12f090b65aab008581 = L.circleMarker(
+                [46.850849, -121.792953],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c1121f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18, "stroke": true, "weight": 1.5}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+        
+    
+        var popup_3fe55528ec7afa4fb6f89e7aafa56f83 = L.popup({"maxWidth": 280});
+
+        
+            
+                var html_9ba11f79bf184c73d8ce3bf20a8bad03 = $(`<div id="html_9ba11f79bf184c73d8ce3bf20a8bad03" style="width: 100.0%; height: 100.0%;">         <div style="font-family:'Helvetica Neue',sans-serif;min-width:200px">           <div style="font-size:15px;font-weight:700;margin-bottom:4px">             UW.STAR             <span style="font-size:11px;font-weight:400;color:#666;                          margin-left:6px">EH* channels</span>           </div>                        <div style="display:inline-block;background:#2E7D32;                         color:white;font-size:11px;padding:2px 8px;                         border-radius:10px;margin-bottom:8px">               dominant: su             </div>           <table style="font-size:12px;border-collapse:collapse;width:100%">             <tr><td style="color:#666;padding:2px 8px 2px 0">Elevation</td>                 <td><b>3365 m</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Lat / Lon</td>                 <td><b>46.851, -121.793</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Years active</td>                 <td><b>16.0</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">First detection</td>                 <td><b>2010-03-01</b></td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Last detection</td>                 <td><b>2026-03-11</b></td></tr>                          <tr><td colspan=2 style="padding-top:6px;font-weight:600;                                      border-top:1px solid #eee">                 Class breakdown</td></tr>             <tr><td style="color:#666;padding:2px 8px 2px 0">Total</td>                 <td><b>94,302</b></td></tr>             <tr><td style="color:#1565C0;padding:2px 8px 2px 0">Earthquake</td>                 <td><b>20,552 (22%)</b></td></tr>             <tr><td style="color:#2E7D32;padding:2px 8px 2px 0">Surface event</td>                 <td><b>53,770 (57%)</b></td></tr>             <tr><td style="color:#BF360C;padding:2px 8px 2px 0">Explosion</td>                 <td><b>19,980 (21%)</b></td></tr>           </table>         </div></div>`)[0];
+                popup_3fe55528ec7afa4fb6f89e7aafa56f83.setContent(html_9ba11f79bf184c73d8ce3bf20a8bad03);
+            
+        
+
+        circle_marker_45c3a5e141bead12f090b65aab008581.bindPopup(popup_3fe55528ec7afa4fb6f89e7aafa56f83)
+        ;
+
+        
+    
+    
+            circle_marker_45c3a5e141bead12f090b65aab008581.bindTooltip(
+                `<div>
+                     UW.STAR (EH) — 16.0 yrs — 94,302 det
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var layer_control_28b5107dd465c37462761ca70a893f33_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_26cdfb70d24bc047a6427ae681ac3960,
+                    "Satellite" : tile_layer_6a89f5916b3132c71e2dea64c4ebac75,
+                    "Light" : tile_layer_4b097a03df707b071dd526d58551afa3,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_28b5107dd465c37462761ca70a893f33 = L.control.layers(
+                layer_control_28b5107dd465c37462761ca70a893f33_layers.base_layers,
+                layer_control_28b5107dd465c37462761ca70a893f33_layers.overlays,
+                {"autoZIndex": true, "collapsed": true, "position": "topright"}
+            ).addTo(map_212c8c03af66ae693b86f2d3c750194b);
+
+        
+</script>
+</html>
