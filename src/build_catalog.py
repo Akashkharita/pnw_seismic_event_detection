@@ -107,9 +107,7 @@ def build_catalog(indir: str, outdir: str):
     n_bad_ts = cat["rounded_start"].isna().sum()
     if n_bad_ts:
         print(f"  WARNING: {n_bad_ts} rows with unparseable timestamps — dropped")
-    cat = cat.dropna(subset=["rounded_start"])    
-    
-    
+    cat = cat.dropna(subset=["rounded_start"])
 
     # ── parse list columns ───────────────────────────────────────────────────
     cat["stations"]    = cat["stations"].apply(parse_list_col)
@@ -143,12 +141,18 @@ def build_catalog(indir: str, outdir: str):
     )
 
     # ── QC flags ─────────────────────────────────────────────────────────────
-    # mean_auc sanity: if it's summed per-station AUC, it scales with
-    # num_stations. Flag rows where mean_auc > 1 (almost certainly summed).
+    # mean_auc is area under smoothed prob curve, summed across stations.
+    # Normalize by num_stations to get per-station average AUC.
     cat["auc_is_summed"] = cat["mean_auc"] > 1.0
+    cat["mean_auc_per_station"] = cat["mean_auc"] / cat["num_stations"]
 
-    cat["low_confidence"]  = cat["mean_prob"] < 0.4
-    cat["high_confidence"] = (cat["mean_prob"] >= 0.5) & (cat["mean_max"] >= 0.75)
+    # mean_max is the primary confidence signal: mean of per-station peak prob
+    # in the detection window. Detection already guarantees >0.50 per station.
+    cat["low_confidence"]  = cat["mean_max"] < 0.65
+    cat["high_confidence"] = (cat["mean_max"] >= 0.75) & (cat["vote_margin"] >= 0.67)
+
+    # Ambiguous class: bare majority or worse (critical at median 3 stations)
+    cat["ambiguous_class"] = cat["vote_margin"] <= 0.5
 
     # ── sort ─────────────────────────────────────────────────────────────────
     cat = cat.sort_values("rounded_start").reset_index(drop=True)
@@ -202,23 +206,24 @@ def build_catalog(indir: str, outdir: str):
                  f"max={sc['max']:.0f}  mean={sc['mean']:.1f}")
 
     lines.append(f"\n--- Confidence ---")
-    lines.append(f"  mean_prob range   : {cat['mean_prob'].min():.3f} – {cat['mean_prob'].max():.3f}")
-    lines.append(f"  mean_max range    : {cat['mean_max'].min():.3f} – {cat['mean_max'].max():.3f}")
-    lines.append(f"  Low confidence (<0.40 prob) : {cat['low_confidence'].sum():,}  "
+    lines.append(f"  mean_max range             : {cat['mean_max'].min():.3f} – {cat['mean_max'].max():.3f}")
+    lines.append(f"  mean_prob range            : {cat['mean_prob'].min():.3f} – {cat['mean_prob'].max():.3f}")
+    lines.append(f"  mean_auc_per_station range : {cat['mean_auc_per_station'].min():.3f} – {cat['mean_auc_per_station'].max():.3f}")
+    lines.append(f"  Low confidence  (mean_max < 0.65)                    : {cat['low_confidence'].sum():,}  "
                  f"({100*cat['low_confidence'].mean():.1f}%)")
-    lines.append(f"  High confidence (≥0.50 prob, ≥0.75 max): "
-                 f"{cat['high_confidence'].sum():,}  "
+    lines.append(f"  High confidence (mean_max ≥ 0.75, vote_margin ≥ 0.67): {cat['high_confidence'].sum():,}  "
                  f"({100*cat['high_confidence'].mean():.1f}%)")
-    lines.append(f"  Unanimous votes   : {cat['unanimous'].sum():,}  "
+    lines.append(f"  Ambiguous class (vote_margin ≤ 0.50)                 : {cat['ambiguous_class'].sum():,}  "
+                 f"({100*cat['ambiguous_class'].mean():.1f}%)")
+    lines.append(f"  Unanimous votes                                       : {cat['unanimous'].sum():,}  "
                  f"({100*cat['unanimous'].mean():.1f}%)")
 
     lines.append(f"\n--- mean_auc flag ---")
     n_summed = cat["auc_is_summed"].sum()
     lines.append(f"  Rows where mean_auc > 1 (likely summed, not averaged): "
                  f"{n_summed:,}  ({100*n_summed/len(cat):.1f}%)")
-    lines.append(f"  mean_auc range: {cat['mean_auc'].min():.3f} – {cat['mean_auc'].max():.3f}")
-    lines.append(f"  → RECOMMENDATION: divide mean_auc by num_stations to get "
-                 f"true per-station average AUC.")
+    lines.append(f"  mean_auc range             : {cat['mean_auc'].min():.3f} – {cat['mean_auc'].max():.3f}")
+    lines.append(f"  mean_auc_per_station range : {cat['mean_auc_per_station'].min():.3f} – {cat['mean_auc_per_station'].max():.3f}")
 
     lines.append(f"\n--- Skipped files ---")
     lines.append(f"  {len(skipped):,} files skipped")
