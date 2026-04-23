@@ -280,6 +280,58 @@ for entry in stations:
         st, source = get_waveforms(net, sta, chn, st_time, et_time)
         print(f"  Raw stream ({source}): {st}")
 
+        
+        
+        # deduplicate by location code — keep preferred location per channel
+        # but keep ALL time segments (do not drop multiple traces of same channel)
+        loc_preference = ["", "00", "01", "--"]
+        seen_locs = {}
+        for tr in st:
+            chan = tr.stats.channel
+            loc  = tr.stats.location
+            if chan not in seen_locs:
+                seen_locs[chan] = loc
+            else:
+                current_rank = loc_preference.index(seen_locs[chan]) \
+                               if seen_locs[chan] in loc_preference else 999
+                new_rank     = loc_preference.index(loc) \
+                               if loc in loc_preference else 999
+                if new_rank < current_rank:
+                    seen_locs[chan] = loc
+
+        # keep only traces from the preferred location per channel
+        st_clean = obspy.Stream([
+            tr for tr in st
+            if tr.stats.location == seen_locs.get(
+                tr.stats.channel, tr.stats.location)
+        ])
+
+        # resample to 100 sps before merging
+        target_fs = 100.0
+        for tr in st_clean:
+            if tr.stats.sampling_rate != target_fs:
+                print(f"  Resampling {tr.id}: "
+                      f"{tr.stats.sampling_rate} -> {target_fs} sps")
+                tr.resample(target_fs)
+
+        # merge all time segments into one continuous trace, filling gaps with 0
+        st_clean.sort()
+        st_clean.merge(method=1, fill_value=0, interpolation_samples=0)
+        print(f"  Clean stream: {st_clean}")
+
+        # skip if too little data — use total samples across all traces
+        total_samples = sum(tr.stats.npts for tr in st_clean)
+        min_samples   = args.min_duration_hours * 3600 * target_fs
+        if not st_clean or total_samples < min_samples:
+            print(f"  SKIP -- insufficient data "
+                  f"(total={total_samples/target_fs/3600:.2f}h, "
+                  f"required={args.min_duration_hours}h)\n")
+            n_skipped += 1
+            continue
+            
+            
+            
+        """
         # deduplicate location codes
         seen_channels = {}
         for tr in sorted(st, key=lambda t: t.stats.location):
@@ -307,6 +359,10 @@ for entry in stations:
             n_skipped += 1
             continue
 
+        """ 
+            
+            
+            
         probs_st = model.annotate(st_clean, stride=500)
         event_records = []
 
