@@ -4,15 +4,26 @@ spearman_network_test.py
 Tests whether the observed event rate trends in the Mt Rainier catalog
 are driven by network expansion or represent real geophysical signal.
 
-Method (following Hibert et al. 2019, GJI):
+Method (following Hibert et al. 2019, GJI, Fig. 5a):
   Compute the Spearman rank correlation coefficient (rs) between monthly
-  event counts and monthly active station count on an expanding window.
-  If rs drops below 0.5 in the primary analysis window (2018-2026), the
-  trend cannot be explained by network growth alone.
+  event counts and monthly active station count using a SHRINKING window
+  with a FIXED END and a MOVING START.
+
+  i.e.:  rs(2010→2025), rs(2011→2025), rs(2012→2025), ... rs(2024→2025)
+
+  The x-axis represents the START year of each window. As the start moves
+  later, older (network-expansion-dominated) years are dropped. If rs
+  falls below 0.5 when restricting to recent years, the trend in that
+  recent period is decorrelated from station count — i.e. it cannot be
+  explained by network growth alone.
+
+  This is the opposite of the original (incorrect) expanding-window
+  implementation, which fixed the start and moved the end, causing rs to
+  perpetually rise toward 1.0 as more correlated history was accumulated.
 
 Produces:
-  - spearman_network_test.png  : main figure for committee presentation
-  - spearman_results.csv       : monthly rs values for all classes
+  - spearman_network_test.png  : main figure (3-panel)
+  - spearman_results.csv       : rs and p-value per window-start, per class
 
 Usage (run from ANY directory):
     python /home/ak287/pnw_seismic_event_detection/src/spearman_network_test.py
@@ -29,25 +40,23 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as mticker
-from matplotlib.patches import Patch
-from matplotlib.lines import Line2D
 from obspy.clients.fdsn import Client
 from obspy import UTCDateTime
 
-# ── paths ─────────────────────────────────────────────────────────────────────
+# ── paths ──────────────────────────────────────────────────────────────────────
 SRC_DIR     = Path(__file__).resolve().parent
 PROJECT_DIR = SRC_DIR.parent
 CATALOG_CSV = PROJECT_DIR / "src/catalog_output" / "master_catalog.csv"
 OUTDIR      = PROJECT_DIR / "src/catalog_output"
 
-# ── analysis boundary ─────────────────────────────────────────────────────────
-ANALYSIS_START    = pd.Timestamp("2018-01-01")
-ANALYSIS_START_MD = mdates.date2num(ANALYSIS_START.to_pydatetime())
+# ── analysis boundary ──────────────────────────────────────────────────────────
+ANALYSIS_START = pd.Timestamp("2018-01-01")
 
 # ── minimum window length for a stable correlation estimate ───────────────────
-MIN_WINDOW_MONTHS = 12
+#    Hibert et al. use annual resolution; we use monthly so 18 months is safe.
+MIN_WINDOW_MONTHS = 18
 
-# ── station list ──────────────────────────────────────────────────────────────
+# ── station list ───────────────────────────────────────────────────────────────
 STATIONS = [
     {"net": "CC", "sta": "ARAT"},  {"net": "CC", "sta": "CARB"},
     {"net": "CC", "sta": "COPP"},  {"net": "CC", "sta": "CRBN"},
@@ -83,7 +92,7 @@ CLASS_LABELS = {
 }
 
 
-# ── 1. fetch station availability ─────────────────────────────────────────────
+# ── 1. fetch station availability ──────────────────────────────────────────────
 def fetch_station_availability(date_min, date_max):
     print("Fetching station availability from FDSN...")
     client = Client("IRIS")
@@ -127,7 +136,7 @@ def fetch_station_availability(date_min, date_max):
     return availability
 
 
-# ── 2. load catalog and build monthly counts ──────────────────────────────────
+# ── 2. load catalog and build monthly counts ───────────────────────────────────
 def load_monthly_counts(catalog_csv):
     print(f"Loading catalog: {catalog_csv}")
     cat = pd.read_csv(catalog_csv)
@@ -140,12 +149,10 @@ def load_monthly_counts(catalog_csv):
                        .dt.to_period("M")
                        .dt.to_timestamp())
 
-    # total events per month
     total = (cat.groupby("month_ts")
                .size()
                .reset_index(name="n_all"))
 
-    # per-class events per month
     for cls in ["su", "eq", "px"]:
         cls_counts = (cat[cat["most_common_class"] == cls]
                       .groupby("month_ts")
@@ -154,157 +161,206 @@ def load_monthly_counts(catalog_csv):
         total = total.merge(cls_counts, on="month_ts", how="left")
 
     total = total.fillna(0)
-    print(f"  Monthly series: {len(total)} months")
+    print(f"  Monthly series: {len(total)} months, "
+          f"{total['month_ts'].min().date()} → {total['month_ts'].max().date()}")
     return total
 
 
-# ── 3. compute expanding-window Spearman rs ───────────────────────────────────
-def compute_spearman_expanding(monthly, availability):
+# ── 3. compute SHRINKING-window Spearman rs (Hibert et al. approach) ───────────
+def compute_spearman_shrinking(monthly, availability):
     """
-    For each month t, compute Spearman rs between:
-      - event counts from month 0 to t
-      - active station counts from month 0 to t
-    Returns a DataFrame with rs and p-value per month per class.
+    Fixed END, moving START — matching Hibert et al. 2019 Fig. 5a.
+
+    For each possible window start month s, compute Spearman rs between:
+      - event counts   from month s to the catalog end
+      - station counts from month s to the catalog end
+
+    The result is indexed by the START of the window (x-axis). Reading the
+    plot left-to-right means progressively dropping the oldest, most
+    network-expansion-dominated years. If rs falls as the start moves into
+    the 2020s, the recent-period trend is NOT explained by network growth.
+
+    Only windows with >= MIN_WINDOW_MONTHS data points are computed.
     """
-    # merge event counts with station counts on month_ts
     merged = monthly.merge(availability, on="month_ts", how="inner")
     merged = merged.sort_values("month_ts").reset_index(drop=True)
-
-    results = []
     n_months = len(merged)
 
-    for i in range(MIN_WINDOW_MONTHS, n_months):
-        window   = merged.iloc[:i+1]
+    results = []
+
+    # i is the index of the window START — iterate from 0 to near the end
+    for i in range(n_months - MIN_WINDOW_MONTHS):
+        window   = merged.iloc[i:]          # everything from i to the END
         stations = window["n_active"].values
-        row      = {"month_ts": merged.loc[i, "month_ts"]}
+        row      = {"window_start": merged.loc[i, "month_ts"]}
 
         for cls_key, col in [("all","n_all"),("su","n_su"),
                               ("eq","n_eq"),("px","n_px")]:
             events = window[col].values
-            # need variance in both series for a meaningful correlation
             if np.std(stations) < 0.01 or np.std(events) < 0.01:
-                row[f"rs_{cls_key}"]    = np.nan
-                row[f"pval_{cls_key}"]  = np.nan
+                row[f"rs_{cls_key}"]   = np.nan
+                row[f"pval_{cls_key}"] = np.nan
             else:
                 rs, pval = stats.spearmanr(stations, events)
                 row[f"rs_{cls_key}"]   = rs
                 row[f"pval_{cls_key}"] = pval
 
+        row["window_end"]    = merged["month_ts"].iloc[-1]
+        row["window_months"] = len(window)
         results.append(row)
 
     results_df = pd.DataFrame(results)
-    print(f"  Computed rs for {len(results_df)} monthly windows")
+    print(f"  Computed rs for {len(results_df)} window-start positions")
     return results_df, merged
 
 
-# ── 4. plot ───────────────────────────────────────────────────────────────────
+# ── 4. plot ────────────────────────────────────────────────────────────────────
 def plot_results(results_df, merged, outpath):
+    """
+    Panel A: Shrinking-window rs vs window START date.
+             X-axis reads left (oldest start = longest window) to right
+             (newest start = shortest, most recent window).
+             Vertical dashed line marks the primary analysis window start
+             (2018-01-01) — windows starting to its right use only the
+             clean post-expansion period.
+
+    Panel B: Raw monthly event counts by class (context).
+
+    Panel C: Active station count over time (context).
+    """
     fig, axes = plt.subplots(
         3, 1, figsize=(14, 12),
-        gridspec_kw={"hspace": 0.40, "height_ratios": [2, 1.2, 1.2]}
+        gridspec_kw={"hspace": 0.42, "height_ratios": [2, 1.2, 1.2]}
     )
 
-    # ── Panel A: Spearman rs over time, one line per class ────────────────────
+    analysis_start_num = mdates.date2num(ANALYSIS_START.to_pydatetime())
+
+    # ── Panel A ────────────────────────────────────────────────────────────────
     ax = axes[0]
 
     for cls_key in ["all", "su", "eq", "px"]:
         col   = f"rs_{cls_key}"
         valid = results_df.dropna(subset=[col])
-        ax.plot(valid["month_ts"], valid[col],
+        ax.plot(valid["window_start"], valid[col],
                 color=CLASS_COLORS[cls_key],
-                lw=2.0 if cls_key == "all" else 1.4,
+                lw=2.2 if cls_key == "all" else 1.5,
                 ls="-"  if cls_key == "all" else "--",
                 label=CLASS_LABELS[cls_key],
                 zorder=3)
 
-    # reference lines
-    ax.axhline(0.7, color="#888", lw=0.9, ls=":", alpha=0.8)
-    ax.axhline(0.5, color="#888", lw=0.9, ls=":", alpha=0.8)
-    ax.axhline(0.3, color="#888", lw=0.9, ls=":", alpha=0.8)
-    ax.text(results_df["month_ts"].iloc[-1] + pd.Timedelta(days=30),
-            0.71, "rs = 0.7", fontsize=8, color="#888", va="bottom")
-    ax.text(results_df["month_ts"].iloc[-1] + pd.Timedelta(days=30),
-            0.51, "rs = 0.5", fontsize=8, color="#888", va="bottom")
-    ax.text(results_df["month_ts"].iloc[-1] + pd.Timedelta(days=30),
-            0.31, "rs = 0.3", fontsize=8, color="#888", va="bottom")
+    # threshold reference lines
+    ax.axhline(0.0, color="#555", lw=0.9, ls="-", alpha=0.5)   # zero line
+    for thresh, label in [(0.7, "rs = 0.7"), (0.5, "rs = 0.5"), (0.3, "rs = 0.3")]:
+        ax.axhline(thresh, color="#999", lw=0.9, ls=":", alpha=0.8)
+        ax.text(results_df["window_start"].iloc[-1] + pd.Timedelta(days=25),
+                thresh + 0.01, label, fontsize=8, color="#888", va="bottom")
 
-    # analysis boundary
-    xlim = ax.get_xlim()
-    ax.axvspan(xlim[0], ANALYSIS_START_MD,
-               color="#dddddd", alpha=0.40, zorder=0)
-    ax.axvline(ANALYSIS_START_MD, color="#333", lw=1.4, ls="--", zorder=5)
-    ylim = ax.get_ylim()
-    ax.text(ANALYSIS_START_MD + (xlim[1]-xlim[0])*0.005,
-            ylim[0] + (ylim[1]-ylim[0])*0.05,
-            "Primary analysis window →",
-            fontsize=8, color="#333", style="italic")
+    # shade pre-analysis-window region and mark the 2018 boundary
+    x_min = mdates.date2num(results_df["window_start"].min().to_pydatetime())
+    x_max = mdates.date2num(
+        (results_df["window_start"].max() + pd.Timedelta(days=60)).to_pydatetime()
+    )
+    ax.axvspan(x_min, analysis_start_num,
+               color="#dddddd", alpha=0.40, zorder=0,
+               label="Pre-2018 (excluded from primary analysis)")
+    ax.axvline(analysis_start_num, color="#333", lw=1.4, ls="--", zorder=5)
+
+    # label the 2018 line
+    ylim_a = (-0.35, 1.05)
+    ax.text(analysis_start_num + (x_max - x_min) * 0.005,
+            ylim_a[0] + (ylim_a[1] - ylim_a[0]) * 0.04,
+            "Windows starting here use\nonly the primary analysis period →",
+            fontsize=7.5, color="#333", style="italic")
 
     ax.set_ylabel("Spearman rs\n(events vs active stations)", fontsize=10)
     ax.set_title(
         "A  —  Spearman correlation: monthly event rate vs active station count\n"
-        "       (expanding window from catalog start)",
-        fontweight="bold", fontsize=11, loc="left")
-    ax.set_ylim(-0.1, 1.05)
+        "       (shrinking window — fixed end, moving start; "
+        "following Hibert et al. 2019)",
+        fontweight="bold", fontsize=10.5, loc="left")
+    ax.set_ylim(ylim_a)
+    ax.set_xlim(x_min, x_max)
     ax.tick_params(labelsize=8)
-    ax.legend(fontsize=8, loc="upper right", framealpha=0.85)
-    ax.grid(axis="y", alpha=0.25)
-    ax.set_xlim(results_df["month_ts"].min(),
-                results_df["month_ts"].max() + pd.Timedelta(days=60))
 
-    # annotation box explaining interpretation
+    # ── custom x-axis: show "catalog_end_year − window_start_year" ────────────
+    # Place a tick at every even year that appears as a window start,
+    # and label it as "end_year − start_year" so readers see window length.
+    catalog_end_year = results_df["window_end"].iloc[0].year
+    # collect every-2-year tick positions that fall inside the data range
+    start_years = sorted(results_df["window_start"].dt.year.unique())
+    tick_years  = [y for y in start_years if y % 2 == 0]
+    tick_dates  = [pd.Timestamp(f"{y}-01-01") for y in tick_years]
+    tick_nums   = mdates.date2num([t.to_pydatetime() for t in tick_dates])
+    tick_labels = [f"{catalog_end_year}−{y}" for y in tick_years]
+    ax.set_xticks(tick_nums)
+    ax.set_xticklabels(tick_labels, fontsize=8)
+
+    ax.legend(fontsize=8, loc="upper right", framealpha=0.90)
+    ax.grid(axis="y", alpha=0.25)
+    ax.set_xlabel(
+        f"Window length  (end year fixed at {catalog_end_year};  "
+        "label = end year − start year)",
+        fontsize=9)
+
+    # interpretation box
     ax.text(0.01, 0.97,
+            "Reading direction: left = long window (more history)\n"
+            "                   right = short window (recent data only)\n"
             "rs > 0.7 → trend likely network-driven\n"
             "rs < 0.5 → trend likely real geophysical signal",
-            transform=ax.transAxes, fontsize=8,
+            transform=ax.transAxes, fontsize=7.5,
             va="top", ha="left",
             bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
-                      edgecolor="#ccc", alpha=0.9))
+                      edgecolor="#ccc", alpha=0.92))
 
-    # ── Panel B: raw monthly event counts (context) ───────────────────────────
+    # ── Panel B: raw monthly event counts ─────────────────────────────────────
     ax = axes[1]
-    for cls_key, col in [("su","n_su"),("eq","n_eq"),("px","n_px")]:
+    for cls_key, col in [("su", "n_su"), ("eq", "n_eq"), ("px", "n_px")]:
         ax.plot(merged["month_ts"], merged[col],
-                color=CLASS_COLORS[cls_key], lw=1.0, alpha=0.8,
+                color=CLASS_COLORS[cls_key], lw=1.0, alpha=0.85,
                 label=CLASS_LABELS[cls_key])
 
-    xlim = ax.get_xlim()
-    ax.axvspan(xlim[0], ANALYSIS_START_MD,
+    x_min_b = mdates.date2num(merged["month_ts"].min().to_pydatetime())
+    x_max_b = mdates.date2num(merged["month_ts"].max().to_pydatetime())
+    ax.axvspan(x_min_b, analysis_start_num,
                color="#dddddd", alpha=0.40, zorder=0)
-    ax.axvline(ANALYSIS_START_MD, color="#333", lw=1.4, ls="--", zorder=5)
+    ax.axvline(analysis_start_num, color="#333", lw=1.4, ls="--", zorder=5)
     ax.set_ylabel("Events per month", fontsize=10)
     ax.set_title("B  —  Monthly event counts by class (raw)",
-                 fontweight="bold", fontsize=11, loc="left")
+                 fontweight="bold", fontsize=10.5, loc="left")
     ax.yaxis.set_major_formatter(
         mticker.FuncFormatter(lambda x, _: f"{int(x):,}"))
     ax.legend(fontsize=8, loc="upper left", framealpha=0.85)
     ax.tick_params(labelsize=8)
     ax.grid(axis="y", alpha=0.25)
-    ax.set_xlim(merged["month_ts"].min(), merged["month_ts"].max())
+    ax.set_xlim(x_min_b, x_max_b)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax.xaxis.set_major_locator(mdates.YearLocator(2))
 
-    # ── Panel C: active station count (context) ───────────────────────────────
+    # ── Panel C: active station count ─────────────────────────────────────────
     ax = axes[2]
     ax.fill_between(merged["month_ts"], merged["n_active"],
-                    color="#E65100", alpha=0.25, zorder=2)
+                    color="#E65100", alpha=0.22, zorder=2)
     ax.plot(merged["month_ts"], merged["n_active"],
             color="#E65100", lw=1.8, zorder=3,
             label="Active stations (FDSN)")
-    ax.axhline(len(STATIONS), color="#E65100", lw=0.8,
-               ls=":", alpha=0.6,
-               label=f"Maximum ({len(STATIONS)} stations)")
+    ax.axhline(len(STATIONS), color="#E65100", lw=0.8, ls=":",
+               alpha=0.6, label=f"Maximum ({len(STATIONS)} stations)")
 
-    xlim = ax.get_xlim()
-    ax.axvspan(xlim[0], ANALYSIS_START_MD,
+    ax.axvspan(x_min_b, analysis_start_num,
                color="#dddddd", alpha=0.40, zorder=0)
-    ax.axvline(ANALYSIS_START_MD, color="#333", lw=1.4, ls="--", zorder=5)
+    ax.axvline(analysis_start_num, color="#333", lw=1.4, ls="--", zorder=5)
     ax.set_ylabel("Active stations", fontsize=10)
     ax.set_title("C  —  Active station count over time (FDSN)",
-                 fontweight="bold", fontsize=11, loc="left")
+                 fontweight="bold", fontsize=10.5, loc="left")
     ax.set_ylim(0, len(STATIONS) * 1.15)
     ax.yaxis.set_major_locator(mticker.MultipleLocator(5))
     ax.legend(fontsize=8, loc="upper left", framealpha=0.85)
     ax.tick_params(labelsize=8)
     ax.grid(axis="y", alpha=0.25)
-    ax.set_xlim(merged["month_ts"].min(), merged["month_ts"].max())
+    ax.set_xlim(x_min_b, x_max_b)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax.xaxis.set_major_locator(mdates.YearLocator(2))
 
     fig.suptitle(
         "Mt Rainier QuakeXNet Catalog — Network Expansion Bias Test\n"
@@ -318,39 +374,62 @@ def plot_results(results_df, merged, outpath):
     print(f"  Figure saved → {outpath}")
 
 
-# ── 5. print summary statistics ───────────────────────────────────────────────
+# ── 5. print summary statistics ────────────────────────────────────────────────
 def print_summary(results_df):
-    print("\n" + "="*60)
-    print("SPEARMAN CORRELATION SUMMARY")
-    print("="*60)
+    print("\n" + "=" * 65)
+    print("SPEARMAN CORRELATION SUMMARY  (shrinking window, fixed end)")
+    print("=" * 65)
+    print(f"  Catalog end (fixed):  {results_df['window_end'].iloc[0].date()}")
+    print()
+
+    # find the rs values for specific scientifically meaningful window starts
+    key_starts = {
+        "Full catalog (from ~2010)":  results_df["window_start"].min(),
+        "From 2015":                  pd.Timestamp("2015-01-01"),
+        "From 2018 (primary window)": pd.Timestamp("2018-01-01"),
+        "From 2020":                  pd.Timestamp("2020-01-01"),
+        "From 2022":                  pd.Timestamp("2022-01-01"),
+    }
 
     for cls_key in ["all", "su", "eq", "px"]:
         col = f"rs_{cls_key}"
-        full   = results_df[col].dropna()
-        pre    = results_df[results_df["month_ts"] <  ANALYSIS_START][col].dropna()
-        post   = results_df[results_df["month_ts"] >= ANALYSIS_START][col].dropna()
-
         print(f"\n{CLASS_LABELS[cls_key].upper()}")
-        print(f"  Full period rs      : {full.iloc[-1]:.3f}  (final value)")
-        if len(pre)  > 0: print(f"  Pre-2018 rs (mean)  : {pre.mean():.3f}")
-        if len(post) > 0: print(f"  Post-2018 rs (mean) : {post.mean():.3f}")
+        for label, ts in key_starts.items():
+            # find the closest available window start
+            row = results_df.iloc[
+                (results_df["window_start"] - ts).abs().argsort()[:1]
+            ]
+            if row.empty or pd.isna(row[col].values[0]):
+                print(f"  {label:<38s}: n/a")
+                continue
+            rs_val   = row[col].values[0]
+            pval     = row[f"pval_{cls_key}"].values[0]
+            n_months = row["window_months"].values[0]
 
-        if len(post) > 0:
-            rs_post = post.mean()
-            if rs_post < 0.3:
-                interp = "VERY WEAK — post-2018 trends are NOT explained by network growth"
-            elif rs_post < 0.5:
-                interp = "WEAK — network growth is a minor factor post-2018"
-            elif rs_post < 0.7:
-                interp = "MODERATE — network growth partially explains the trend"
+            if rs_val < 0.3:
+                interp = "VERY WEAK — not network-driven"
+            elif rs_val < 0.5:
+                interp = "WEAK — trend likely real"
+            elif rs_val < 0.7:
+                interp = "MODERATE — partial network influence"
             else:
-                interp = "STRONG — trends may still be driven by network growth"
-            print(f"  Interpretation      : {interp}")
+                interp = "STRONG — possible network bias"
 
-    print("\n" + "="*60)
+            print(f"  {label:<38s}: rs={rs_val:+.3f}  "
+                  f"p={pval:.3f}  n={n_months}mo  → {interp}")
+
+    print("\n" + "=" * 65)
+    print("KEY INTERPRETATION NOTE:")
+    print("  Unlike an expanding window (which always drifts toward rs→1),")
+    print("  the shrinking window isolates whether the RECENT period alone")
+    print("  is correlated with station count. If rs falls below 0.5 for")
+    print("  windows starting after ~2020, the post-2020 trend cannot be")
+    print("  attributed to network expansion. This matches Hibert et al.")
+    print("  (2019) who found rs < 0.5 for windows starting after 2005.")
+    print("=" * 65)
 
 
-# ── 6. main ───────────────────────────────────────────────────────────────────
+# ── 6. main ────────────────────────────────────────────────────────────────────
 def main():
     OUTDIR.mkdir(parents=True, exist_ok=True)
 
@@ -363,8 +442,8 @@ def main():
     date_max     = monthly["month_ts"].max()
     availability = fetch_station_availability(date_min, date_max)
 
-    print("\nComputing Spearman expanding-window correlations...")
-    results_df, merged = compute_spearman_expanding(monthly, availability)
+    print("\nComputing Spearman shrinking-window correlations...")
+    results_df, merged = compute_spearman_shrinking(monthly, availability)
 
     print_summary(results_df)
 

@@ -32,9 +32,9 @@ from matplotlib.patches import Patch
 # ── paths ─────────────────────────────────────────────────────────────────────
 SRC_DIR          = Path(__file__).resolve().parent
 PROJECT_DIR      = SRC_DIR.parent
-CATALOG_CSV      = SRC_DIR / "catalog_output" / "master_catalog.csv"
+CATALOG_CSV      = PROJECT_DIR/"data"/ "master_catalog.csv"
 STATION_JSON_DIR = PROJECT_DIR / "logs" / "mt_rainier_detections"
-OUTDIR           = SRC_DIR / "catalog_output"
+OUTDIR           = PROJECT_DIR /"data"/ "catalog_output"
 
 # ── analysis window ───────────────────────────────────────────────────────────
 CATALOG_END = pd.Timestamp("2025-12-31 23:59:59")

@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Location pipeline intermediate outputs
+src/catalog_output/located_events_checkpoint_*.csv
+src/catalog_output/tt_cache/
+notebooks/loc/
+notebooks/events/
+notebooks/det_all/
+notebooks/waveforms/
+notebooks/fk_inputs/
+notebooks/infrapy_runs/
+
+# Generated figures and maps
+notebooks/figures/
+notebooks/iframe_figures/
+notebooks/maps_html/
+plotly_map_locations/
+plots/
+figures/
+notebooks/*.html
+notebooks/*.png
+notebooks/*.mseed
+
+# Runtime outputs
+logs/
+
+# Raw data (too large for git)
+data/
+
+# Credentials — never commit
+utils/service_account.json
+*.json.key
+*.pem
+
+# Station config files (not needed in repo)
+stations.json
+src/stations.json
+notebooks/stations.json
+src/mt_rainier_stations.json
+src/mt_rainier_stations.txt
+
+# Scratch / superseded scripts
+src/gen_com_events.py
+src/gen_com_events_v2.py
+src/check_missed_events.py
+src/run_com_det_year.py
+
+# Scratch notebooks
+notebooks/visualizing_commonly_detected_events.py.ipynb
+notebooks/su_clustering*.ipynb
+notebooks/su_event_clustering.ipynb
+notebooks/Untitled*.ipynb
+notebooks/abc.ipynb
+
+# Misc
+conda_packages.txt
+ReadMe
