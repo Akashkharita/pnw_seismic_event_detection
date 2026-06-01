@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 import subprocess
 
-start = datetime(2015, 1, 1)
-end = datetime(2025, 1, 1)
+start = datetime(2010, 1, 1)
+end = datetime(2026, 1, 1)
 
 current = start
 
@@ -14,10 +14,10 @@ while current <= end:
     print("Running:", start_time)
 
     subprocess.run([
-        "python", "custom_daily_detection.py",
+        "python", "daily_detection_dynamic.py",
         "--start", start_time,
         "--end", end_time,
-        "--stations_json", "mt_rainier_stations.json"
+        #"--stations_json", "mt_rainier_stations.json"
     ])
 
     current += timedelta(days=1)
