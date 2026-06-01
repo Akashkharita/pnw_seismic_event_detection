@@ -1,4 +1,23 @@
 
+# QuakeXNet · Mt. Rainier Surface Event Catalog (2010–2025)
+
+A 15-year seismic event catalog built by running the **QuakeXNet** deep-learning detector on continuous waveforms from stations within 50 km of Mt. Rainier, then locating events with **ENVELOC**.
+
+| | |
+|---|---|
+| **Surface events (SU)** | 114,775 |
+| **Explosions (PX)** | 13,766 |
+| **Total located** | 128,541 |
+| **Period** | Jan 2010 – Dec 2025 |
+
+## Catalog Overview
+
+![Catalog overview – event locations, monthly counts, and distance distribution](data/catalog_overview.png)
+
+> **Interactive dashboard** – open [`data/enveloc_dashboard.html`](data/enveloc_dashboard.html) locally in a browser for a fully interactive map (heatmap / point-cloud toggle), time-series, and distance histogram with per-class and per-station-count filters.
+
+---
+
 ## Using the trained **QuakeXNet** model with **SeisBench**
 
 This section explains how to (1) install SeisBench, (2) register the custom `QuakeXNet` model class, and (3) place the trained weights where SeisBench expects them.

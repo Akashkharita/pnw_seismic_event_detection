@@ -32,7 +32,10 @@ notebooks/*.mseed
 logs/
 
 # Raw data (too large for git)
-data/
+data/*
+# Exceptions: shared dashboard and overview figure
+!data/enveloc_dashboard.html
+!data/catalog_overview.png
 
 # Credentials — never commit
 utils/service_account.json
