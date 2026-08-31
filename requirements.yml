@@ -30,6 +30,12 @@ dependencies:
       # first with:  conda install -c conda-forge cartopy
       - enveloc==1.1.5
 
+      # --- Optional: UW/PNSN internal waveform archive -------------------
+      # Much faster than FDSN for the years it covers (through 2022). Both
+      # daily_detection_dynamic.py and locate_events.py use it when present
+      # and fall back to FDSN when it isn't. Needs archive access to be useful.
+      - pnwstore==0.2.1
+
       # --- Optional: plotting / dashboards / notebooks -------------------
       - tqdm
       - plotly
