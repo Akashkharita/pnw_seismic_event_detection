@@ -117,7 +117,15 @@ from obspy.clients.fdsn import Client
 from obspy.core.util import AttribDict
 from obspy.signal.filter import envelope
 
-from pnwstore import WaveformClient
+# pnwstore (UW-internal waveform archive) is optional and imported lazily in
+# get_pnw_client(); without it, PNWSTORE_AVAILABLE stays False and every year
+# is served by FDSN instead.
+try:
+    from pnwstore import WaveformClient
+    PNWSTORE_AVAILABLE = True
+except ImportError:
+    WaveformClient = None
+    PNWSTORE_AVAILABLE = False
 
 # suppress pnwstore's own logging
 logging.getLogger("PNWstore").setLevel(logging.ERROR)
@@ -513,7 +521,7 @@ def download_single_station(args):
     if resolved is not None:
         preferred_chan = resolved[3]
 
-    if year <= PNWSTORE_END_YEAR:
+    if year <= PNWSTORE_END_YEAR and PNWSTORE_AVAILABLE:
         return download_waveform_pnwstore(sta, t_start, t_end,
                                           preferred_chan=preferred_chan)
     else:

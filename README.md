@@ -74,59 +74,60 @@ utils/        Station metadata
 
 ---
 
-## Using the trained QuakeXNet model with SeisBench
+## Using the trained QuakeXNet model
 
-### 1) Install SeisBench
+The trained weights (`src/models/quakexnet/base.pt.v3`) and the model definition
+(`src/quakexnet.py`) both live in this repo, so no download or SeisBench
+patching is required. SeisBench itself is still needed — `QuakeXNet` subclasses
+`seisbench.models.base.WaveformModel` and inherits `annotate()` from it.
 
-```bash
-pip install seisbench
-```
-
-### 2) Copy the model definition into SeisBench
-
-SeisBench discovers models from its internal `seisbench/models/` package:
-
-```bash
-cp src/quakexnet.py <PATH_TO_SITE_PACKAGES>/seisbench/models/quakexnet.py
-```
-
-To find the correct `models/` directory:
-
-```bash
-python -c "import seisbench, os; print(os.path.join(os.path.dirname(seisbench.__file__), 'models'))"
-```
-
-### 3) Register `QuakeXNet` inside `seisbench.models`
-
-Open `<PATH_TO_SITE_PACKAGES>/seisbench/models/__init__.py` and add:
+### Quick start (recommended)
 
 ```python
-from .quakexnet import QuakeXNet
+from load_model import load_quakexnet   # run from the src/ directory
+
+model = load_quakexnet()
+probs = model.annotate(stream, stride=500)   # stream = 3-component ObsPy Stream
 ```
 
-### 4) Add trained weights to the SeisBench cache
+`annotate()` returns four traces — `QuakeXNet_eq`, `QuakeXNet_px`,
+`QuakeXNet_no`, `QuakeXNet_su`. `px` is the explosion class; `no` is noise and is
+ignored by the detection scripts. Resampling to the model's 50 Hz is handled by
+SeisBench.
 
-```bash
-mkdir -p ~/.seisbench/models/v3/quakexnet
-cp src/base.pt.v3 ~/.seisbench/models/v3/quakexnet/base.pt.v3
-echo '{}' > ~/.seisbench/models/v3/quakexnet/base.json.v3
-```
+### Alternative: register the model inside SeisBench
 
-Final layout:
+Needed only if you want `sbm.QuakeXNet.from_pretrained(...)` to work, e.g. to
+share the model across projects.
 
-```
-~/.seisbench/models/v3/quakexnet/
-├── base.pt.v3
-└── base.json.v3
-```
+1. Copy the model definition into the SeisBench package:
 
-### 5) Import and use the model
+   ```bash
+   cp src/quakexnet.py "$(python -c 'import seisbench, os; print(os.path.join(os.path.dirname(seisbench.__file__), "models"))')/quakexnet.py"
+   ```
 
-```python
-import seisbench.models as sbm
+2. Add to `seisbench/models/__init__.py`:
 
-model = sbm.QuakeXNet()
-```
+   ```python
+   from .quakexnet import QuakeXNet
+   ```
+
+3. Copy the weights into the SeisBench cache. Note that the cache root is *not*
+   always `~/.seisbench` — it can be overridden by `SEISBENCH_CACHE_ROOT`:
+
+   ```bash
+   CACHE=$(python -c 'import seisbench; print(seisbench.cache_root)')
+   mkdir -p "$CACHE/models/v3/quakexnet"
+   cp src/models/quakexnet/base.pt.v3 "$CACHE/models/v3/quakexnet/base.pt.v3"
+   echo '{}' > "$CACHE/models/v3/quakexnet/base.json.v3"
+   ```
+
+4. Then:
+
+   ```python
+   import seisbench.models as sbm
+   model = sbm.QuakeXNet.from_pretrained("base", version_str="3")
+   ```
 
 ---
 

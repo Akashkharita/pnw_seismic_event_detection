@@ -9,7 +9,7 @@ import io
 import json
 import time
 import numpy as np
-import seisbench.models as sbm
+from load_model import load_quakexnet
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from fastapi.responses import JSONResponse
@@ -46,7 +46,7 @@ app = FastAPI(
 # request. This is why APIs are fast — the expensive part happens once.
 
 print("Loading QuakeXNet model...")
-model = sbm.QuakeXNet.from_pretrained("base", version_str="3")
+model = load_quakexnet()
 print("Model loaded and ready.")
 
 # IRIS client — same as your script, reused across all requests

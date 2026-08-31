@@ -32,12 +32,10 @@ import torch
 import obspy
 from obspy import UTCDateTime
 from obspy.clients.fdsn import Client
-from pnwstore import WaveformClient
 
 import sys
-sys.path.append('/home/ak287/seisbench/seisbench/models')
 
-import seisbench.models as sbm
+from load_model import load_quakexnet
 from detect import smooth_moving_avg, detect_event_windows
 
 
@@ -105,13 +103,25 @@ print(f"  Window   : {st_time}  to  {et_time}")
 print(f"  Box      : lat [{args.min_lat}, {args.max_lat}]  "
       f"lon [{args.min_lon}, {args.max_lon}]")
 print(f"  Nets     : {'ALL' if networks == ['*'] else networks}")
+# pnwstore is a UW-internal waveform archive and is optional. It is imported
+# lazily so that installations without it (e.g. outside UW) can still run the
+# full detection pipeline against FDSN.
+pnw_client = None
+if use_pnwstore:
+    try:
+        from pnwstore import WaveformClient
+        pnw_client = WaveformClient()        # waveforms up to end of 2022
+    except ImportError:
+        print("  pnwstore not installed - using FDSN for all years.")
+        use_pnwstore = False
+
 print(f"  Waveforms: {'pnwstore' if use_pnwstore else 'IRIS FDSN (post-2022 fallback)'}")
 print(f"{'='*60}\n")
 
 
 # ── clients ────────────────────────────────────────────────────────────────────
 fdsn_client = Client(args.fdsn_client)   # metadata always; waveforms post-2022
-pnw_client  = WaveformClient()           # waveforms up to end of 2022
+
 
 
 # ── waveform fetch with automatic source selection + fallback ──────────────────
@@ -121,7 +131,7 @@ def get_waveforms(net, sta, chn, starttime, endtime):
     If pnwstore returns empty or raises, automatically falls back to IRIS.
     Returns (stream, source_label).
     """
-    if use_pnwstore:
+    if use_pnwstore and pnw_client is not None:
         try:
             st = pnw_client.get_waveforms(
                 network=net, station=sta, channel=chn + "*",
@@ -245,7 +255,7 @@ if not os.path.exists(log_file):
 
 # ── 3. load model ──────────────────────────────────────────────────────────────
 print("Loading QuakeXNet model...")
-model = sbm.QuakeXNet.from_pretrained("base", version_str='3')
+model = load_quakexnet()
 print("  Model loaded.\n")
 
 

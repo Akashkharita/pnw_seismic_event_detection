@@ -18,10 +18,8 @@ from detect import smooth_moving_avg, detect_event_windows
 
 import sys
 
-import seisbench.models as sbm
+from load_model import load_quakexnet
 
-# change the path according to your needs
-sys.path.append('/home/ak287/seisbench/seisbench/models')
 
 ##
 ### 1. `daily_detection.py`
@@ -97,7 +95,7 @@ print(f"Running detection from {st_time} to {et_time} ({et_time-st_time} seconds
 # -------------------- Setup --------------------
 
 # Load model
-model = sbm.QuakeXNet.from_pretrained("base", version_str = '3')
+model = load_quakexnet()
 
 
 # Load station list

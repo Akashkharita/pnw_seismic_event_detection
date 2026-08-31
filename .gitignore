@@ -48,6 +48,34 @@ src/stations.json
 notebooks/stations.json
 src/mt_rainier_stations.json
 src/mt_rainier_stations.txt
+utils/stations_old.json
+notebooks/rainier_stations_within_70km.csv
+notebooks/station_channel_summary.csv
+notebooks/station_channels_detail.csv
+notebooks/station_preferred_channels.csv
+
+# Raw external catalog downloads (ESEC / PNSN, re-fetchable)
+src/mount_rainier_events_from_esec.txt
+src/pnw_events_esec.txt
+src/pnw_surface_events_from_esec.txt
+src/pnsn_su_event_catalog.csv
+src/surface_events.xml
+
+# Diagnostic / missed-event analysis outputs (reproducible from pipeline)
+notebooks/catalog_audit_candidates.csv
+notebooks/confused_px_events.csv
+notebooks/confused_su_events.csv
+notebooks/missed_events.csv
+notebooks/missed_events_station_check.csv
+src/missed_events_station_detail.csv
+src/missed_events_station_detail_v2.csv
+src/missed_events_station_lookup.csv
+src/missed_events_station_lookup_v2.csv
+src/recovery_report.csv
+src/surface_events_10_stations_dec_2025.csv
+
+# Scratch drafts
+temp_draft*.md
 
 # Scratch / superseded scripts
 src/gen_com_events.py
