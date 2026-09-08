@@ -55,9 +55,7 @@ notebooks/station_channels_detail.csv
 notebooks/station_preferred_channels.csv
 
 # Raw external catalog downloads (ESEC / PNSN, re-fetchable)
-src/mount_rainier_events_from_esec.txt
-src/pnw_events_esec.txt
-src/pnw_surface_events_from_esec.txt
+# ESEC .txt catalogs are now committed - notebooks reference them directly
 src/pnsn_su_event_catalog.csv
 src/surface_events.xml
 
